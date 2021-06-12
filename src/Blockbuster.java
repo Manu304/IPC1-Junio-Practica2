@@ -8,9 +8,8 @@ public class Blockbuster {
         Blockbuster programa = new Blockbuster();
     }
 
-    final String[] PRONOMBRES = { "el", "la" };
     Scanner scanner = new Scanner(System.in);
-    String[][] clientes, peliculas;
+    String[][] clientes, peliculas; //[fila][columna]
     int [][] prestamoPeliculas;
     //String[] nombreClientes, nombrePelis, categoriaPelis;
     //int[][] peliculasPrestadas, idTelefonoClientes, idAnioPelis;
@@ -18,21 +17,53 @@ public class Blockbuster {
     //boolean[] clientePresta, peliDisponible;
 
     public Blockbuster() {
-        final int CANTIDAD_INICIAL = 30;
+        final int CANTIDAD_TOTAL = 2; //CAMBIAR A 30 LA CANTIDAD
+        clientes = new String [CANTIDAD_TOTAL][3];
         menu();
+        
 
     }
+    public String[][] agregarCliente(String[][] arreglo){
+        int posicion = 0;
+        
+        while ((posicion < arreglo.length) && (arreglo[posicion][0] != null)) {
+            posicion ++;
+        }
+        if (posicion < arreglo.length) {
+            arreglo[posicion][0] = Integer.toString(pedirNumero("el ID del cliente"));
+            arreglo[posicion][1] = pedirString("el nombre del cliente");
+            arreglo[posicion][2] = Integer.toString(pedirNumero("el telefono del cliente"));
+        } else {
+            System.out.println("Lo sentimos, no se pueden ingresar mas clientes :(");
+            
+        }
+        return arreglo;
+    }
+    public void mostrarClientes(String [][] arreglo){
+        int posicion = 0;
+        if (arreglo[0][0] == null) {
+            System.out.println("No hay nada para mostrar por ahora");
+        } else {
+            while ((posicion < arreglo.length) && (arreglo[posicion][0] != null)) {
+                System.out.println(arreglo[posicion][0]);
+                posicion ++;
+            }
+            for (int i = 0; i < posicion; i++) {
+                System.out.println("\nID: " + arreglo[i][0]);
+                System.out.println("Nombre: " + arreglo[i][1]);
+                System.out.println("Telefono: " + arreglo[i][2]);
+            }
+        }
+    }
+
     
 
-    public int pedirNumero(String solicitud, boolean femPronombre) {
+    public int pedirNumero(String solicitud) {
         int numero = 0;
-        String pronombre = PRONOMBRES[1];
-        if (!femPronombre) {
-            pronombre = PRONOMBRES[0];
-        }
+        
         do {
             try {
-                System.out.print("Ingrese " + pronombre + " " + solicitud + ": ");
+                System.out.print("Ingrese " + " " + solicitud + ": ");
                 int ingresado = scanner.nextInt();
                 if (ingresado < 0) {
                     System.out.println("\nNo puede ingresar un valor negativo");
@@ -48,12 +79,8 @@ public class Blockbuster {
         return numero;
     }
 
-    public String pedirString(String solicitud, boolean femPronombre) {
-        String pronombre = PRONOMBRES[1];
-        if (!femPronombre) {
-            pronombre = PRONOMBRES[0];
-        }
-        System.out.print("Ingrese " + pronombre + " " + solicitud + ": ");
+    public String pedirString(String solicitud) {
+        System.out.print("Ingrese " + " " + solicitud + ": ");
         String palabra = scanner.nextLine();
         palabra = scanner.nextLine();
         return palabra;
@@ -90,9 +117,11 @@ public class Blockbuster {
                         break;
                     case 6:
                         System.out.println("Quire ingresar un nuevo cliente");
+                        agregarCliente(clientes);
                         break;
                     case 7:
                         System.out.println("Le muestro clientes");
+                        mostrarClientes(clientes);
                         break;
                     case 8:
                         System.err.println("Le muestro reportes");
