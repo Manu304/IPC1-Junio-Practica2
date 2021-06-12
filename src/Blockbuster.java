@@ -7,12 +7,45 @@ public class Blockbuster {
     public static void main(String[] args) {
         Blockbuster programa = new Blockbuster();
     }
+    final String [] PRONOMBRES = {"el", "la"};
     Scanner scanner = new Scanner(System.in);
+    String [] nombreClientes, nombrePelis,categoriaPelis;
+    int [][] peliculasPrestadas;
+    int [] telefonoClientes, idClientes, idPelis, anioPelis;
+    boolean [] clientePresta, peliDisponible;
 
     public Blockbuster(){
         menu();
 
     }
+    public int pedirNumero(String solicitud, boolean femPronombre){
+        int numero = 0;
+        String pronombre = PRONOMBRES[1];
+        if (!femPronombre) {
+            pronombre = PRONOMBRES[0];
+        }
+        do {
+            System.out.print("Ingrese " + pronombre + " " + solicitud + ": ");
+            int ingresado = scanner.nextInt();
+            if (ingresado > 0) {
+                numero = ingresado;
+                
+            } else {
+                System.out.println("No puede ingresar un valor negativo");  
+            }
+            
+        } while (numero < 0);
+        
+
+        return numero;
+    }
+    /*
+    public String pedirString(String solicitud, boolean femPronombre){
+        String palabra, fem = "la";
+
+    }
+    */
+
     public void menu() {
         boolean salir = false;
         int opcion = 0;
