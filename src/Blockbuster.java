@@ -27,16 +27,12 @@ public class Blockbuster {
         do {
             System.out.print("Ingrese " + pronombre + " " + solicitud + ": ");
             int ingresado = scanner.nextInt();
-            if (ingresado > 0) {
-                numero = ingresado;
-                
-            } else {
-                System.out.println("No puede ingresar un valor negativo");  
+            if (ingresado < 0) {
+                System.out.println("\nNo puede ingresar un valor negativo");
             }
-            
-        } while (numero < 0);
-        
+            numero = ingresado;
 
+        } while (numero < 0);
         return numero;
     }
     /*
@@ -70,6 +66,8 @@ public class Blockbuster {
                         break;
                     case 4:
                         System.out.println("quiere ingresar pelis");
+                        int random = pedirNumero("año", false);
+                        System.out.println(random);
                         break;
                     case 5:
                         System.out.println("Quiere ordenar las pelis");
@@ -86,6 +84,7 @@ public class Blockbuster {
                     case 9:
                         salir = true;
                         System.out.println("Vuelva pronto :)");
+                        break;
                     default:
                         System.out.println("Ups. Esa opción no existe.");
                         break;
