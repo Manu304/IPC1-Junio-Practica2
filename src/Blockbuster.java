@@ -12,6 +12,7 @@ public class Blockbuster {
     final String[] CATEGORIAS = {"aventura", "accion", "terror", "drama", "comedia", "otro"};
     String[][] clientes, peliculas; //[fila][columna]
     int [][] prestamoPeliculas;
+    boolean[] estadoClientes, estadoPelis;
     //String[] nombreClientes, nombrePelis, categoriaPelis;
     //int[][] peliculasPrestadas, idTelefonoClientes, idAnioPelis;
     //int[] telefonoClientes, idClientes, idPelis, anioPelis;
@@ -19,16 +20,15 @@ public class Blockbuster {
 
     public Blockbuster() {
         final int CANTIDAD_TOTAL = 3; //CAMBIAR A 30 LA CANTIDAD
-        clientes = new String [CANTIDAD_TOTAL][4];
-        peliculas = new String [CANTIDAD_TOTAL][5];
-
+        clientes = new String [CANTIDAD_TOTAL][3];
+        estadoClientes = new boolean [CANTIDAD_TOTAL];
+        peliculas = new String [CANTIDAD_TOTAL][4];
+        estadoPelis = new boolean [CANTIDAD_TOTAL];
         menu();
-        
-
     }
 
     //METODOS DE AQUi AL FINAL FUNCIONANDO AL 100
-    public String [][] ordenarNumerico(String[][] datos, int columna){
+    public String [][] ordenarNumerico(String[][] datos, int columna, boolean[] estados){
         for (int i = 0; i < datos.length - 1; i++) {
             for (int j = 0; j < datos.length - 1 - i; j++) {
                 int primero = Integer.valueOf(datos[j+1][columna]);
@@ -38,13 +38,17 @@ public class Blockbuster {
                     String[] filaTemp = datos[j];
                     datos[j] = datos[j+1];
                     datos[j+1] = filaTemp;
+
+                    boolean estadoAux = estados[j];
+                    estados[j] = estados[j+1];
+                    estados[j+1] = estadoAux;
                 }
             }
         }
         return datos;
     }
 
-    public String [][] ordenarAlfabetico(String[][] datos, int columna){
+    public String [][] ordenarAlfabetico(String[][] datos, int columna, boolean[] estados){
         for (int i = 0; i < datos.length - 1; i++) {
             for (int j = 0; j < datos.length - 1 - i; j++) {
                 String primero = datos[j+1][columna].toLowerCase();
@@ -54,6 +58,11 @@ public class Blockbuster {
                     String[] filaTemp = datos[j];
                     datos[j] = datos[j+1];
                     datos[j+1] = filaTemp;
+
+                    
+                    boolean estadoAux = estados[j];
+                    estados[j] = estados[j+1];
+                    estados[j+1] = estadoAux;
                 }
             }
         }
@@ -67,11 +76,11 @@ public class Blockbuster {
             posicion ++;
         }
         if (posicion < arreglo.length) {
-            arreglo[posicion][0] = Integer.toString(pedirNumero("el ID de la pelicula"));
+            arreglo[posicion][0] = Integer.toString(pedirID(arreglo, false, "el ID de la pelicula"));
             arreglo[posicion][1] = pedirString("el nombre de la pelicula");
             arreglo[posicion][2] = Integer.toString(pedirNumero("el anio de la pelicula"));
             arreglo[posicion][3] = pedirString("una categoria para la pelicula").toLowerCase();
-            arreglo[posicion][4] = "disponible";
+            estadoPelis[posicion] = true;
             
         } else {
             System.out.println("Lo sentimos, no se pueden ingresar mas peliculas :("); 
@@ -79,7 +88,7 @@ public class Blockbuster {
         return arreglo;
     }
 
-    public void mostrarPelis(String [][] arreglo, boolean todas, String estado){
+    public void mostrarPelis(String [][] arreglo, boolean todas, boolean estado){
         int posicion = 0;
         if (arreglo[0][0] == null) {
             System.out.println("No hay nada para mostrar por ahora");
@@ -89,11 +98,11 @@ public class Blockbuster {
             }
             
             for (int i = 0; i < posicion; i++) {
-                if (todas) {
+                if (todas == true) {
                 imprimirPeli(arreglo, i);
                     
                 } else{
-                    if (arreglo[i][4].equals(estado)) {
+                    if (estadoPelis[i] == estado) {
                         imprimirPeli(arreglo, i);
                     }
                 }
@@ -105,8 +114,17 @@ public class Blockbuster {
         System.out.println("Nombre: " + arreglo[fila][1]);
         System.out.println("Anio: " + arreglo[fila][2]);
         System.out.println("Categoria: " + arreglo[fila][3]);
-        System.out.println("Estado: " + arreglo[fila][4]);
+        System.out.println("Estado: " + imprimirEstado(estadoPelis[fila]));
 
+    }
+    public String imprimirEstado(boolean estado){
+        String estadoEscrito;
+        if (estado == true) {
+            estadoEscrito = "Disponible";
+        } else {
+            estadoEscrito = "No disponible";
+        }
+        return estadoEscrito;
     }
 
     public int datosNetos(String[][] datos){
@@ -117,7 +135,7 @@ public class Blockbuster {
         return contador;
     }
     public void prestarPelis(){
-        mostrarClientes(clientes, false, "disponible");
+        mostrarClientes(clientes, false, true);
         boolean valido = false;
         while (valido) {
             int idCliente = pedirNumero("el id del clinete que prestara");
@@ -126,7 +144,26 @@ public class Blockbuster {
                 System.out.println("\nEl usuario no existe");
             }
         }
-        mostrarPelis(peliculas, false, "disponible");
+        mostrarPelis(peliculas, false, true);
+    }
+    public int pedirID(String [][] datos, boolean existe, String mensaje){
+        int idPedido;
+        boolean valido = existe;
+
+        if (datos[0][0] != null) {
+            do {
+                idPedido = pedirNumero(mensaje);
+                valido = buscarID(idPedido, datos, 0);
+                if (valido != existe) {
+                    System.out.println("\nPor favor, elija otro id");
+                }
+                
+            } while (valido != existe);
+        }else{
+            idPedido = pedirNumero(mensaje);
+        }
+
+        return idPedido;
     }
 
     public boolean buscarID(int id, String[][] datos, int columna){
@@ -154,10 +191,10 @@ public class Blockbuster {
             posicion ++;
         }
         if (posicion < arreglo.length) {
-            arreglo[posicion][0] = Integer.toString(pedirNumero("el ID del cliente"));
+            arreglo[posicion][0] = Integer.toString(pedirID(arreglo, false, "el ID del cliente"));
             arreglo[posicion][1] = pedirString("el nombre del cliente");
             arreglo[posicion][2] = Integer.toString(pedirNumero("el telefono del cliente"));
-            arreglo[posicion][3] = "disponible";
+            estadoClientes[posicion] = true;
 
         } else {
             System.out.println("Lo sentimos, no se pueden ingresar mas clientes :(");
@@ -166,7 +203,7 @@ public class Blockbuster {
         return arreglo;
     }
 
-    public void mostrarClientes(String [][] arreglo, boolean todos, String estado){
+    public void mostrarClientes(String [][] arreglo, boolean todos, boolean estado){
         int posicion = 0;
         if (arreglo[0][0] == null) {
             System.out.println("No hay nada para mostrar por ahora");
@@ -175,10 +212,10 @@ public class Blockbuster {
                 posicion ++;
             }
             for (int i = 0; i < posicion; i++) {
-                if (todos) {
+                if (todos == true) {
                     imprimirCliente(arreglo, i);
                 } else {
-                    if (arreglo[i][3].equals(estado)) {
+                    if (estadoClientes[i] == estado) {
                         imprimirCliente(arreglo, i);
                     } 
                 }
@@ -243,7 +280,7 @@ public class Blockbuster {
                         break;
                     case 3:
                         System.out.println("\n-----LISTA DE PELICULAS REGISTRADAS-------\n");
-                        mostrarPelis(peliculas, true, "");
+                        mostrarPelis(peliculas, true, true);
                         
                         break;
                     case 4:
@@ -253,8 +290,8 @@ public class Blockbuster {
                         break;
                     case 5:
                         System.out.println("\n-----LISTA DE PELICULAS ORDENADAS (A-Z)-----");
-                        String [][] ordenados = ordenarAlfabetico(peliculas, 1);
-                        mostrarPelis(ordenados, true, "");
+                        String [][] ordenados = ordenarAlfabetico(peliculas, 1, estadoPelis);
+                        mostrarPelis(ordenados, true, true);
                         break;
                     case 6:
                         System.out.println("\n----------AGREGANDO UN CLIENTE-----------\n");
@@ -262,7 +299,7 @@ public class Blockbuster {
                         break;
                     case 7:
                         System.out.println("\n-------LISTA DE CLIENTES REGISTRADOS-------");
-                        mostrarClientes(clientes, true, "");
+                        mostrarClientes(clientes, true, true);
                         break;
                     case 8:
                         System.err.println("Le muestro reportes");
