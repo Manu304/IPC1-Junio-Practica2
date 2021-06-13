@@ -94,12 +94,17 @@ public class Blockbuster {
             posicion ++;
         }
         if (posicion < arreglo.length) {
+            System.out.println("\n--------CLIENTES DISPONIBLES PARA PRESTAMO---------");
             mostrarClientes(clientes, false, true);
             int clientePesta = pedirID(clientes, true, "el ID del cliente que prestara");
+            System.out.println();
+            System.out.println("--------PELICULAS DISPONIBLES PARA PRESTAMO---------");
             mostrarPelis(peliculas, false, true);
+            System.out.println();
             int peliPrestada = pedirID(peliculas, true, "el ID de la pelicula que prestara");
+            System.out.println();
             int diasPrestado = pedirNumero("la cantidad de dias que prestara la pelicula");
-            System.out.println("El cliente: " + obtenerDatoArreglo(clientes, 1, clientePesta) + " , prestara la pelicula: "
+            System.out.println("\nEl cliente: " + obtenerDatoArreglo(clientes, 1, clientePesta) + " , prestara la pelicula: "
                                 + obtenerDatoArreglo(peliculas, 1, peliPrestada) + " por " + diasPrestado + " dias.");
             System.out.println("Esta seguro de que quiere realizar el prestamo? \n1. Si \n2. No");
             int opcion = pedirNumero("una opcion");
@@ -110,6 +115,7 @@ public class Blockbuster {
 
                 estadoClientes[posicion] = false;
                 estadoPelis[posicion] = false;
+                System.out.println("Se ha prestado la pelicula");
             }else{
                 System.out.println("\nVen a prestar una peli cuando quieras");
             }
@@ -335,7 +341,7 @@ public class Blockbuster {
                 opcion = scanner.nextInt();
                 switch (opcion) {
                     case 1:
-                        System.out.println("Quiere prestar una peli");
+                        System.out.println("\n----------PRESTAMO DE PELICULAS-----------\n");
                         boolean disponiblePelis = verificarDisponibilidad(estadoPelis);
                         boolean disponibleClientes = verificarDisponibilidad(estadoClientes);
                         if ((disponiblePelis == true) && (disponibleClientes == true)) {
@@ -372,20 +378,52 @@ public class Blockbuster {
                         mostrarClientes(clientes, true, true);
                         break;
                     case 8:
-                        System.err.println("Le muestro reportes");
+                        menuReportes();
                         break;
                     case 9:
                         salir = true;
-                        System.out.println("Vuelva pronto :)");
+                        System.out.println("Vuelva pronto :)\n");
                         break;
                     default:
-                        System.out.println("Ups. Esa opción no existe.");
+                        System.out.println("Ups. Esa opción no existe.\n");
                         break;
                 }
 
             } catch (InputMismatchException e) {
                 System.out.println("\nERROR. Debes de ingresar un numero\n");
                 scanner.nextLine();
+            }
+        }
+    }
+
+    public void menuReportes(){
+        boolean salir = false;
+        int opcion = 0;
+        while (!salir) {
+            System.out.println("\n------------REPORTES-------------\n");
+            System.out.println("1. Cantidad de peliculas por categoria \n2. Mostrar peliculas por categoria \n3. Reporte de prestamos de peliculas" 
+                                + "\n4. Peliculas mas y menos prestadas \n5. Regresar\n");
+            opcion = pedirNumero("una opcion");
+            switch (opcion) {
+                case 1:
+                    System.out.println("Quiere ver la cantidad de pelis por categoria");
+                    break;
+                case 2:
+                    System.out.println("Quiere ver las pelis por categoria");
+                    break;
+                case 3:
+                    System.out.println("Quiere ver los prestamos de las pelis");
+                    break;
+                case 4:
+                    System.out.println("Quiere ver las mas y menos prestadas");
+                    break;
+                case 5:
+                    salir = true;
+                    break;
+            
+                default:
+                    System.out.println("Ups, esa opcion no existe");
+                    break;
             }
         }
     }
