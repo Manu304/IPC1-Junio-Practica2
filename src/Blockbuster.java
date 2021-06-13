@@ -29,43 +29,50 @@ public class Blockbuster {
 
     //METODOS DE AQUi AL FINAL FUNCIONANDO AL 100
     public String [][] ordenarNumerico(String[][] datos, int columna, boolean[] estados){
-        for (int i = 0; i < datos.length - 1; i++) {
-            for (int j = 0; j < datos.length - 1 - i; j++) {
-                int primero = Integer.valueOf(datos[j+1][columna]);
-                int segundo = Integer.valueOf(datos[j][columna]);
-
-                if (segundo > primero) {
-                    String[] filaTemp = datos[j];
-                    datos[j] = datos[j+1];
-                    datos[j+1] = filaTemp;
-
-                    boolean estadoAux = estados[j];
-                    estados[j] = estados[j+1];
-                    estados[j+1] = estadoAux;
+        if (datosNetos(datos) > 1) {
+            for (int i = 0; i < datos.length - 1; i++) {
+                for (int j = 0; j < datos.length - 1 - i; j++) {
+                    int primero = Integer.valueOf(datos[j+1][columna]);
+                    int segundo = Integer.valueOf(datos[j][columna]);
+    
+                    if (segundo > primero) {
+                        String[] filaTemp = datos[j];
+                        datos[j] = datos[j+1];
+                        datos[j+1] = filaTemp;
+    
+                        boolean estadoAux = estados[j];
+                        estados[j] = estados[j+1];
+                        estados[j+1] = estadoAux;
+                    }
                 }
             }
         }
+
         return datos;
     }
 
     public String [][] ordenarAlfabetico(String[][] datos, int columna, boolean[] estados){
-        for (int i = 0; i < datos.length - 1; i++) {
-            for (int j = 0; j < datos.length - 1 - i; j++) {
-                String primero = datos[j+1][columna].toLowerCase();
-                String segundo = datos[j][columna].toLowerCase();
-
-                if (primero.compareTo(segundo) < 0) {
-                    String[] filaTemp = datos[j];
-                    datos[j] = datos[j+1];
-                    datos[j+1] = filaTemp;
-
-                    
-                    boolean estadoAux = estados[j];
-                    estados[j] = estados[j+1];
-                    estados[j+1] = estadoAux;
+        if (datosNetos(datos) > 1) {
+            for (int i = 0; i < datos.length - 1; i++) {
+                for (int j = 0; j < datos.length - 1 - i; j++) {
+                    String primero = datos[j+1][columna].toLowerCase();
+                    String segundo = datos[j][columna].toLowerCase();
+    
+                    if (primero.compareTo(segundo) < 0) {
+                        String[] filaTemp = datos[j];
+                        datos[j] = datos[j+1];
+                        datos[j+1] = filaTemp;
+                        
+                        boolean estadoAux = estados[j];
+                        estados[j] = estados[j+1];
+                        estados[j+1] = estadoAux;
+                    }
                 }
             }
+        } else {
+            
         }
+
         return datos;
     }
     //ENTRADO A BLOQUE DE CODIGO NUEVO
@@ -155,7 +162,11 @@ public class Blockbuster {
                 idPedido = pedirNumero(mensaje);
                 valido = buscarID(idPedido, datos, 0);
                 if (valido != existe) {
-                    System.out.println("\nPor favor, elija otro id");
+                    if (existe == false) {
+                        System.out.println("\nEse ID ya se encuentra en uso");
+                    } else {
+                        System.out.println("\nEse ID no se encuentra registrado");
+                    }
                 }
                 
             } while (valido != existe);
