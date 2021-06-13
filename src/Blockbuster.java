@@ -24,7 +24,20 @@ public class Blockbuster {
         estadoClientes = new boolean [CANTIDAD_TOTAL];
         peliculas = new String [CANTIDAD_TOTAL][4];
         estadoPelis = new boolean [CANTIDAD_TOTAL];
+        prestamoPeliculas = new int [CANTIDAD_TOTAL][3];
         menu();
+    }
+
+    public boolean verificarDisponibilidad(boolean[] estados){
+        boolean disponible = false;
+        int contador = 0;
+        while ((contador < estados.length) && (estados[contador] == true)) {
+            contador++;
+        }
+        if (contador > 0) {
+            disponible = true;
+        }
+        return disponible;
     }
 
     //METODOS DE AQUi AL FINAL FUNCIONANDO AL 100
@@ -74,6 +87,49 @@ public class Blockbuster {
         }
 
         return datos;
+    }
+    public int[][] agregarPrestamo(int[][] arreglo){
+        int posicion = 0;
+        while ((posicion < arreglo.length) && (arreglo[posicion][0] != 0)) {
+            posicion ++;
+        }
+        if (posicion < arreglo.length) {
+            mostrarClientes(clientes, false, true);
+            int clientePesta = pedirID(clientes, true, "el ID del cliente que prestara");
+            mostrarPelis(peliculas, false, true);
+            int peliPrestada = pedirID(peliculas, true, "el ID de la pelicula que prestara");
+            int diasPrestado = pedirNumero("la cantidad de dias que prestara la pelicula");
+            System.out.println("El cliente: " + obtenerDatoArreglo(clientes, 1, clientePesta) + " , prestara la pelicula: "
+                                + obtenerDatoArreglo(peliculas, 1, peliPrestada) + " por " + diasPrestado + " dias.");
+            System.out.println("Esta seguro de que quiere realizar el prestamo? \n1. Si \n2. No");
+            int opcion = pedirNumero("una opcion");
+            if (opcion == 1) {
+                arreglo[posicion][0] = clientePesta;
+                arreglo[posicion][1] = peliPrestada;
+                arreglo[posicion][2] = diasPrestado;
+
+                estadoClientes[posicion] = false;
+                estadoPelis[posicion] = false;
+            }else{
+                System.out.println("\nVen a prestar una peli cuando quieras");
+            }
+            
+        } else {
+            System.out.println("Lo sentimos, no se pueden realizar mas prestamos :("); 
+        }
+        return arreglo;
+
+    }
+    public String obtenerDatoArreglo(String[][] datos, int columna, int id){
+        boolean encontrado = buscarID(id, datos, 0);
+        int indice = posicionDatoID(id, datos);
+        String datoObtenido = "";
+        if (encontrado == true) {
+            datoObtenido = datos[indice][columna];
+        } else {
+            
+        }
+        return datoObtenido;
     }
     //ENTRADO A BLOQUE DE CODIGO NUEVO
     public String[][] agregarPeli(String[][] arreglo){
@@ -141,18 +197,7 @@ public class Blockbuster {
         }
         return contador;
     }
-    public void prestarPelis(){
-        mostrarClientes(clientes, false, true);
-        boolean valido = false;
-        while (valido) {
-            int idCliente = pedirNumero("el id del clinete que prestara");
-            valido = buscarID(idCliente, clientes, 0);
-            if (valido) {
-                System.out.println("\nEl usuario no existe");
-            }
-        }
-        mostrarPelis(peliculas, false, true);
-    }
+
     public int pedirID(String [][] datos, boolean existe, String mensaje){
         int idPedido;
         boolean valido = existe;
@@ -188,11 +233,17 @@ public class Blockbuster {
         }
         return correcto;
     }
-
-
-
-
-
+    public int posicionDatoID(int id, String [][] datos){
+        int contador = 0;
+        if (datos[0][0] != null) {
+            for (int i = 0; i < datosNetos(datos); i++) {
+                if (Integer.valueOf(datos[i][0]) != id) {
+                    contador++;
+                }
+            }
+        }
+        return contador;
+    }
     //FINAL DEL CODIGO NUEVO
 
     public String[][] agregarCliente(String[][] arreglo){
@@ -285,6 +336,14 @@ public class Blockbuster {
                 switch (opcion) {
                     case 1:
                         System.out.println("Quiere prestar una peli");
+                        boolean disponiblePelis = verificarDisponibilidad(estadoPelis);
+                        boolean disponibleClientes = verificarDisponibilidad(estadoClientes);
+                        if ((disponiblePelis == true) && (disponibleClientes == true)) {
+                            prestamoPeliculas = agregarPrestamo(prestamoPeliculas);
+                        }else{
+                            System.out.println("No hay peliculas o clientes disponibles");
+                        }
+                        
                         break;
                     case 2:
                         System.out.println("Quiere devolver una peli");
