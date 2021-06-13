@@ -17,12 +17,30 @@ public class Blockbuster {
     //boolean[] clientePresta, peliDisponible;
 
     public Blockbuster() {
-        final int CANTIDAD_TOTAL = 2; //CAMBIAR A 30 LA CANTIDAD
+        final int CANTIDAD_TOTAL = 3; //CAMBIAR A 30 LA CANTIDAD
         clientes = new String [CANTIDAD_TOTAL][3];
         menu();
         
 
     }
+
+    //METODOS DE AQUÍ AL FINAL FUNCIONANDO AL 100
+    public String [][] ordenarAlfabetico(String[][] datos, int columna){
+        for (int i = 0; i < datos.length - 1; i++) {
+            for (int j = 0; j < datos.length - 1 - i; j++) {
+                String primero = datos[j+1][columna].toLowerCase();
+                String segundo = datos[j][columna].toLowerCase();
+
+                if (primero.compareTo(segundo) < 0) {
+                    String[] filaTemp = datos[j];
+                    datos[j] = datos[j+1];
+                    datos[j+1] = filaTemp;
+                }
+            }
+        }
+        return datos;
+    }
+
     public String[][] agregarCliente(String[][] arreglo){
         int posicion = 0;
         
@@ -45,7 +63,6 @@ public class Blockbuster {
             System.out.println("No hay nada para mostrar por ahora");
         } else {
             while ((posicion < arreglo.length) && (arreglo[posicion][0] != null)) {
-                System.out.println(arreglo[posicion][0]);
                 posicion ++;
             }
             for (int i = 0; i < posicion; i++) {
@@ -114,6 +131,8 @@ public class Blockbuster {
                         break;
                     case 5:
                         System.out.println("Quiere ordenar las pelis");
+                        String [][] ordenados = ordenarAlfabetico(clientes, 1);
+                        mostrarClientes(ordenados);
                         break;
                     case 6:
                         System.out.println("Quire ingresar un nuevo cliente");
