@@ -25,6 +25,22 @@ public class Blockbuster {
     }
 
     //METODOS DE AQUÍ AL FINAL FUNCIONANDO AL 100
+    public String [][] ordenarNumerico(String[][] datos, int columna){
+        for (int i = 0; i < datos.length - 1; i++) {
+            for (int j = 0; j < datos.length - 1 - i; j++) {
+                int primero = Integer.valueOf(datos[j+1][columna]);
+                int segundo = Integer.valueOf(datos[j][columna]);
+
+                if (segundo > primero) {
+                    String[] filaTemp = datos[j];
+                    datos[j] = datos[j+1];
+                    datos[j+1] = filaTemp;
+                }
+            }
+        }
+        return datos;
+    }
+    
     public String [][] ordenarAlfabetico(String[][] datos, int columna){
         for (int i = 0; i < datos.length - 1; i++) {
             for (int j = 0; j < datos.length - 1 - i; j++) {
