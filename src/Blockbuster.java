@@ -540,7 +540,7 @@ public class Blockbuster {
 
     public void mostrarPorCategoria(String categoriaAB){
         System.out.println("\n-------PELICULAS DE " + categoriaAB.toUpperCase() + "-------\n");
-        for (int i = 0; i < datosNetos(categorias); i++) {
+        for (int i = 0; i < datosNetos(peliculas); i++) {
             if (categoriaAB.equalsIgnoreCase(peliculas[i][3])) {
                 imprimirPeli(peliculas, i, false);
             }
