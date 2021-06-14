@@ -508,10 +508,10 @@ public class Blockbuster {
                             System.out.println("\n-------------PELICULA MENOS PRESTADA-----------");
                             imprimirPeli(peliculas, 0, true);
                         }else{
-                            System.out.println("No se han prestado peliculas");
+                            System.out.println("\nNo se han prestado peliculas");
                         }
                     } else {
-                        System.out.println("No hay peliculas registradas");
+                        System.out.println("\nNo hay peliculas registradas");
                     }
 
 
