@@ -500,21 +500,14 @@ public class Blockbuster {
                     break;
                 case 4:
                     if (peliculas[0][0] != null) {
-                        
-                        if (prestamoPeliculas[0][0] != null) {
-                            System.out.println("\n--------------PELICULA MAS PRESTADA------------");
-                            peliculas = ordenarNumerico(peliculas, 4, estadoPelis, true);
-                            imprimirPeli(peliculas, (datosNetos(peliculas)-1), true);
-                            System.out.println("\n-------------PELICULA MENOS PRESTADA-----------");
-                            imprimirPeli(peliculas, 0, true);
-                        }else{
-                            System.out.println("\nNo se han prestado peliculas");
-                        }
+                        System.out.println("\n--------------PELICULA MAS PRESTADA------------");
+                        peliculas = ordenarNumerico(peliculas, 4, estadoPelis, true);
+                        imprimirPeli(peliculas, (datosNetos(peliculas)-1), true);
+                        System.out.println("\n-------------PELICULA MENOS PRESTADA-----------");
+                        imprimirPeli(peliculas, 0, true);
                     } else {
                         System.out.println("\nNo hay peliculas registradas");
                     }
-
-
                     break;
                 case 5:
                     salir = true;
