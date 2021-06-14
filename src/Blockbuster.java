@@ -393,8 +393,8 @@ public class Blockbuster {
         int opcion = 0;
         while (!salir) {
             // mostrarle al usuario las opciones
-            System.out.println("~~~~[MEMORABILIA-ALQUILER DE PELICULAS]~~~");
-            System.out.println("\n---------------MENU PRINCIPAL-------------");
+            System.out.println("\n~~~~[MEMORABILIA-ALQUILER DE PELICULAS]~~~");
+            System.out.println("---------------MENU PRINCIPAL-------------");
             System.out.println("    \n1. Prestar pelicula" + "    \n2. Devolver pelicula" + "    \n3. Mostrar peliculas"
                     + "    \n4. Ingresar peliculas" + "    \n5. Ordenar peliculas" + "    \n6. Ingresar nuevos clientes"
                     + "    \n7. Mostrar clientes" + "    \n8. Reportes" + "    \n9. Salir\n");
