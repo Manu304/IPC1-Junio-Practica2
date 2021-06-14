@@ -174,7 +174,7 @@ public class Blockbuster {
                 System.out.println("Pelicula: " + obtenerDatoArreglo(peliculas, 1, idPeliDeudora));
                 System.out.println("Prestada por: " + obtenerDatoArreglo(clientes, 1, idClienteDeudor));
                 System.out.println("ID prestador: " + prestamoPeliculas[i][0]);
-                System.out.println("Dias que solicito la pelicula: " + prestamoPeliculas[i][2]);
+                System.out.println("Dias que solicito la pelicula: " + prestamoPeliculas[i][2] + "\n");
             }
         } else {
             System.out.println("\nNinguna pelicula ha sido prestada");
