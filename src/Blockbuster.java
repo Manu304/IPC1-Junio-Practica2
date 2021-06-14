@@ -23,6 +23,7 @@ public class Blockbuster {
         categorias = new String[CANTIDAD_TOTAL][2];
         menu();
     }
+    
 
     public boolean verificarDisponibilidad(boolean[] estados, boolean disponible){
         boolean hay = false;
@@ -103,7 +104,7 @@ public class Blockbuster {
             int clientePesta = pedirID(clientes, true, "el ID del cliente que prestara");
             System.out.println();
             System.out.println("--------PELICULAS DISPONIBLES PARA PRESTAMO---------");
-            mostrarPelis(peliculas, false, true);
+            mostrarPelis(peliculas, false, true, false);
             System.out.println();
             int peliPrestada = pedirID(peliculas, true, "el ID de la pelicula que prestara");
             System.out.println();
@@ -220,7 +221,7 @@ public class Blockbuster {
         return arreglo;
     }
 
-    public void mostrarPelis(String [][] arreglo, boolean todas, boolean estado){
+    public void mostrarPelis(String [][] arreglo, boolean todas, boolean estado, boolean contador){
         int posicion = 0;
         if (arreglo[0][0] == null) {
             System.out.println("No hay nada para mostrar por ahora");
@@ -231,23 +232,25 @@ public class Blockbuster {
             
             for (int i = 0; i < posicion; i++) {
                 if (todas == true) {
-                imprimirPeli(arreglo, i);
+                imprimirPeli(arreglo, i, contador);
                     
                 } else{
                     if (estadoPelis[i] == estado) {
-                        imprimirPeli(arreglo, i);
+                        imprimirPeli(arreglo, i, contador);
                     }
                 }
             }
         }
     }
-    public void imprimirPeli(String[][] arreglo, int fila){
-        System.out.println("\nID: " + arreglo[fila][0]);
-        System.out.println("Nombre: " + arreglo[fila][1]);
-        System.out.println("Anio: " + arreglo[fila][2]);
-        System.out.println("Categoria: " + arreglo[fila][3]);
-        System.out.println("Estado: " + imprimirEstado(estadoPelis[fila]));
-
+    public void imprimirPeli(String[][] arreglo, int fila, boolean contador){ //agregandole contador a impresion
+        String mensaje = "\nID: " + arreglo[fila][0] + "\nNombre: " + arreglo[fila][1];
+        String extra;
+        if (contador == false) {
+            extra = "\nAnio: " + arreglo[fila][2] + "\nCategoria: " + arreglo[fila][3] + "\nEstado: " + imprimirEstado(estadoPelis[fila]);
+        }else{
+            extra = "\nPrestada: " + arreglo[fila][4] + " veces";
+        }
+        System.out.println(mensaje + extra);
     }
     public String imprimirEstado(boolean estado){
         String estadoEscrito;
@@ -301,6 +304,19 @@ public class Blockbuster {
             }
         }
         return correcto;
+    }
+
+    public boolean buscarPalabra(String palabra, String[][] datos, int columna){
+        boolean correcto = false;
+        if (datos[0][0] != null) {
+            for (int i = 0; i < datosNetos(datos); i++) {
+                if (datos[i][columna].equalsIgnoreCase(palabra)) {
+                    correcto = true;
+                }
+            }
+        }
+        return correcto;
+
     }
     public int posicionDatoID(int id, String [][] datos){
         int contador = 0;
@@ -384,7 +400,7 @@ public class Blockbuster {
     public String pedirString(String solicitud) {
         System.out.print("Ingrese " + " " + solicitud + ": ");
         String palabra = scanner.nextLine();
-        palabra = scanner.nextLine();
+        palabra = scanner.nextLine().toLowerCase().trim();
         return palabra;
     }
 
@@ -427,14 +443,14 @@ public class Blockbuster {
                             prestamoPeliculas = quitarPrestamo(prestamoPeliculas, peliIDDevolver, clienteIDDevolver);
                             System.out.println("\nSe ha devuelto la pelicula");
                         }else{
-                            System.out.println("No hay peliculas prestadas");
+                            System.out.println("\nNo hay peliculas prestadas");
                         }
                         
                         
                         break;
                     case 3:
                         System.out.println("\n-----LISTA DE PELICULAS REGISTRADAS-------\n");
-                        mostrarPelis(peliculas, true, true);
+                        mostrarPelis(peliculas, true, true, false);
                         
                         break;
                     case 4:
@@ -445,7 +461,7 @@ public class Blockbuster {
                     case 5:
                         System.out.println("\n-----LISTA DE PELICULAS ORDENADAS (A-Z)-----");
                         String [][] ordenados = ordenarAlfabetico(peliculas, 1, estadoPelis, true);
-                        mostrarPelis(ordenados, true, true);
+                        mostrarPelis(ordenados, true, true, false);
                         break;
                     case 6:
                         System.out.println("\n----------AGREGANDO UN CLIENTE-----------\n");
@@ -484,20 +500,26 @@ public class Blockbuster {
             opcion = pedirNumero("una opcion");
             switch (opcion) {
                 case 1:
-                    System.out.println("----------CANTIDAD DE PELICULAS POR CATEGORIAS---------");
+                    System.out.println("\n----------CANTIDAD DE PELICULAS POR CATEGORIAS---------\n");
                     mostrarCategorias(categorias, false);
                     if (categorias[0][0] != null) {
                         System.out.println("\nTOTAL DE PELICULAS REGISTRADAS: " + datosNetos(peliculas));
                     }
                     break;
                 case 2:
-                    System.out.println("Quiere ver las pelis por categoria");
+                    menuCategorias();
                     break;
                 case 3:
-                    System.out.println("Quiere ver los prestamos de las pelis");
+                    System.out.println("\n---------REPORTE DE PRESTAMOS DE PELICULAS------------\n");
+                    mostrarPelis(peliculas, true, true, true);
                     break;
                 case 4:
-                    System.out.println("Quiere ver las mas y menos prestadas");
+                    System.out.println("----Mostrando peli MAS prestada");
+                    peliculas = ordenarNumerico(peliculas, 4, estadoPelis, true);
+                    imprimirPeli(peliculas, (datosNetos(peliculas)-1), true);
+                    System.out.println("-----Mostrando peli MENOS prestada");
+                    imprimirPeli(peliculas, 0, true);
+
                     break;
                 case 5:
                     salir = true;
@@ -510,7 +532,7 @@ public class Blockbuster {
         }
     }
     public void menuCategorias(){
-        System.out.println("------CATEGORIAS REGISTRADAS--------");
+        System.out.println("\n------------CATEGORIAS REGISTRADAS------------\n");
         boolean salir = false;
         if (categorias[0][0] != null) {
             while(!salir){
@@ -519,10 +541,27 @@ public class Blockbuster {
                 int opcion = pedirNumero("un numero de la lista mostrada");
                 if (opcion == (datosNetos(categorias)+1)) {
                     salir = true;
+                }else{
+                    if (opcion <= datosNetos(categorias)) {
+                        System.out.println("Ha seleccionado ver: " + categorias[(opcion-1)][0]);
+                        System.out.println("Impreso por i cuenta---- segunda vcategra");
+                        
+                        mostrarPorCategoria(categorias[(opcion-1)][0]);
+                        salir = true;
+                    }
                 }
             }
-        }else{
-            System.out.println("\nAun no hay categorias registradas");
+        }
+    }
+    public void mostrarPorCategoria(String categoria){
+        int contador = 0;
+        System.out.println("\n-------PELICULAS DE " + categoria.toUpperCase() + "-------\n");
+        while ((contador < datosNetos(peliculas)) && (peliculas[contador][3].equals(categoria))) {
+            imprimirPeli(peliculas, contador, false);
+            contador++;
+        }
+        if (contador == 0) {
+            System.out.println("No hay peliculas en esta categoria");
         }
     }
     //ARREGLAR METODO PARA OBTENER CATEGORIAS
