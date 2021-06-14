@@ -66,12 +66,10 @@ public class Blockbuster {
 
     public String [][] ordenarAlfabetico(String[][] datos, int columna, boolean[] estados, boolean tieneEstados){
         if (datosNetos(datos) > 2) {
-            for (int i = 0; i < datos.length - 1; i++) {
-                for (int j = 0; j < datos.length - 1 - i; j++) {
-                    String primero = datos[j+1][columna].toLowerCase();
-                    String segundo = datos[j][columna].toLowerCase();
+            for (int i = 0; i < datosNetos(datos) - 1; i++) {
+                for (int j = 0; j < datosNetos(datos) - 1 - i; j++) {
     
-                    if (primero.compareToIgnoreCase(segundo) < 0) {
+                    if (datos[j+1][columna].compareToIgnoreCase(datos[j][columna]) < 0) {
                         String[] filaTemp = datos[j];
                         datos[j] = datos[j+1];
                         datos[j+1] = filaTemp;
