@@ -41,8 +41,8 @@ public class Blockbuster {
 
     public String [][] ordenarNumerico(String[][] datos, int columna, boolean[] estados, boolean tieneEstados){
         if (datosNetos(datos) > 1) {
-            for (int i = 0; i < datos.length - 1; i++) {
-                for (int j = 0; j < datos.length - 1 - i; j++) {
+            for (int i = 0; i < datosNetos(datos) - 1; i++) {
+                for (int j = 0; j < datosNetos(datos) - 1 - i; j++) {
                     int primero = Integer.valueOf(datos[j+1][columna]);
                     int segundo = Integer.valueOf(datos[j][columna]);
     
