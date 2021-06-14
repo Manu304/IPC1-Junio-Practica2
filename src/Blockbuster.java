@@ -143,23 +143,19 @@ public class Blockbuster {
         return arreglo;
     }
 
-    public String [][] eliminarVacios (String [][] datos){
-        int posicion = 0;
-        if (datos[0][0] != null) {
-            while(posicion < datos.length){
-                if (datos[posicion][0] == null) {
-                    int indiceAdelntado = posicion + 1;
-                    if (indiceAdelntado < datos.length) {
-                        if (datos[indiceAdelntado] != null) {
-                            datos[posicion] = datos[indiceAdelntado];
-                            datos[indiceAdelntado] = null;
-                        }
-                    }
+    public String [][] eliminarVacios (String [][] arreglo){
+        for (int i = 0; i < arreglo.length; i++) {
+            if (arreglo[i][0] != null) {
+                int indice = i-1;
+                if (indice >= 0) {
+                    String[] filaAux = arreglo[i];
+                    arreglo[i] = arreglo[indice];
+                    arreglo[indice] = filaAux;
+                    //borrarFila(arreglo, i-1);
                 }
-                posicion++;
             }
         }
-        return datos;
+        return arreglo;
     }
 
     public void imprimirDeudores(){
