@@ -13,7 +13,7 @@ public class Blockbuster {
     boolean[] estadoClientes, estadoPelis;
 
     public Blockbuster() {
-        final int CANTIDAD_TOTAL = 10; //CAMBIAR A 30 LA CANTIDAD
+        final int CANTIDAD_TOTAL = 30; //CAMBIAR A 30 LA CANTIDAD
         clientes = new String [CANTIDAD_TOTAL][3];
         estadoClientes = new boolean [CANTIDAD_TOTAL];
         peliculas = new String [CANTIDAD_TOTAL][5];
@@ -71,7 +71,7 @@ public class Blockbuster {
                     String primero = datos[j+1][columna].toLowerCase();
                     String segundo = datos[j][columna].toLowerCase();
     
-                    if (primero.toLowerCase().compareTo(segundo.toLowerCase()) < 0) {
+                    if (primero.compareToIgnoreCase(segundo) < 0) {
                         String[] filaTemp = datos[j];
                         datos[j] = datos[j+1];
                         datos[j+1] = filaTemp;
