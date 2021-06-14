@@ -484,9 +484,11 @@ public class Blockbuster {
             switch (opcion) {
                 case 1:
                     System.out.println("\n----------CANTIDAD DE PELICULAS POR CATEGORIAS---------\n");
-                    mostrarCategorias(categorias, false);
                     if (categorias[0][0] != null) {
+                        mostrarCategorias(categorias, false);
                         System.out.println("\nTOTAL DE PELICULAS REGISTRADAS: " + datosNetos(peliculas));
+                    }else{
+                        System.out.println("No hay categorias registradas\n");
                     }
                     break;
                 case 2:
@@ -497,11 +499,21 @@ public class Blockbuster {
                     mostrarPelis(peliculas, true, true, true);
                     break;
                 case 4:
-                    System.out.println("\n--------------PELICULA MAS PRESTADA------------");
-                    peliculas = ordenarNumerico(peliculas, 4, estadoPelis, true);
-                    imprimirPeli(peliculas, (datosNetos(peliculas)-1), true);
-                    System.out.println("\n-------------PELICULA MENOS PRESTADA-----------");
-                    imprimirPeli(peliculas, 0, true);
+                    if (peliculas[0][0] != null) {
+                        
+                        if (prestamoPeliculas[0][0] != null) {
+                            System.out.println("\n--------------PELICULA MAS PRESTADA------------");
+                            peliculas = ordenarNumerico(peliculas, 4, estadoPelis, true);
+                            imprimirPeli(peliculas, (datosNetos(peliculas)-1), true);
+                            System.out.println("\n-------------PELICULA MENOS PRESTADA-----------");
+                            imprimirPeli(peliculas, 0, true);
+                        }else{
+                            System.out.println("No se han prestado peliculas");
+                        }
+                    } else {
+                        System.out.println("No hay peliculas registradas");
+                    }
+
 
                     break;
                 case 5:
