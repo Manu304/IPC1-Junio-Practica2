@@ -9,8 +9,8 @@ public class Blockbuster {
     }
 
     Scanner scanner = new Scanner(System.in);
-    String[][] clientes, peliculas, categorias; //[fila][columna]
-    int [][] prestamoPeliculas;
+    String[][] clientes, peliculas, categorias, prestamoPeliculas; //[fila][columna]
+    //int [][] prestamoPeliculas;
     boolean[] estadoClientes, estadoPelis;
 
     public Blockbuster() {
@@ -19,21 +19,26 @@ public class Blockbuster {
         estadoClientes = new boolean [CANTIDAD_TOTAL];
         peliculas = new String [CANTIDAD_TOTAL][5];
         estadoPelis = new boolean [CANTIDAD_TOTAL];
-        prestamoPeliculas = new int [CANTIDAD_TOTAL][3];
+        prestamoPeliculas = new String [CANTIDAD_TOTAL][3];
         categorias = new String[CANTIDAD_TOTAL][2];
         menu();
     }
 
-    public boolean verificarDisponibilidad(boolean[] estados){
-        boolean disponible = false;
+    public boolean verificarDisponibilidad(boolean[] estados, boolean disponible){
+        boolean hay = false;
         int contador = 0;
-        while ((contador < estados.length) && (estados[contador] == true)) {
-            contador++;
+        if ((peliculas[0][0] != null) || (clientes[0][0] != null)) {
+            for (int i = 0; i < estados.length; i++) {
+                if (estados[i] == disponible) {
+                    contador++;
+                }
+            }
         }
         if (contador > 0) {
-            disponible = true;
+            hay = true;
         }
-        return disponible;
+
+        return hay;
     }
 
     //METODOS DE AQUi AL FINAL FUNCIONANDO AL 100
@@ -69,7 +74,7 @@ public class Blockbuster {
                     String primero = datos[j+1][columna].toLowerCase();
                     String segundo = datos[j][columna].toLowerCase();
     
-                    if (primero.compareTo(segundo) < 0) {
+                    if (primero.toLowerCase().compareTo(segundo.toLowerCase()) < 0) {
                         String[] filaTemp = datos[j];
                         datos[j] = datos[j+1];
                         datos[j+1] = filaTemp;
@@ -85,10 +90,12 @@ public class Blockbuster {
 
         return datos;
     }
-    public int[][] agregarPrestamo(int[][] arreglo){
+    public String[][] agregarPrestamo(String[][] arreglo){
         int posicion = 0;
-        while ((posicion < arreglo.length) && (arreglo[posicion][0] != 0)) {
-            posicion ++;
+        if (arreglo[0][0] != null) {
+            while ((posicion < arreglo.length) && (arreglo[posicion][0] != null)) {
+                posicion ++;
+            }
         }
         if (posicion < arreglo.length) {
             System.out.println("\n--------CLIENTES DISPONIBLES PARA PRESTAMO---------");
@@ -106,14 +113,16 @@ public class Blockbuster {
             System.out.println("Esta seguro de que quiere realizar el prestamo? \n1. Si \n2. No");
             int opcion = pedirNumero("una opcion");
             if (opcion == 1) {
-                arreglo[posicion][0] = clientePesta;
-                arreglo[posicion][1] = peliPrestada;
-                arreglo[posicion][2] = diasPrestado;
 
-                estadoClientes[posicion] = false;
-                estadoPelis[posicion] = false;
-                int contador = Integer.valueOf(peliculas[posicion][4]) + 1;
-                peliculas[posicion][4] = Integer.toString(contador);
+                arreglo[posicion][0] = Integer.toString(clientePesta);
+                arreglo[posicion][1] = Integer.toString(peliPrestada);
+                arreglo[posicion][2] = Integer.toString(diasPrestado);
+                
+
+                estadoClientes[posicionDatoID(clientePesta, clientes)] = false;
+                estadoPelis[posicionDatoID(peliPrestada, peliculas)] = false;
+                int contador = Integer.parseInt(peliculas[posicionDatoID(peliPrestada, peliculas)][4]) + 1;
+                peliculas[posicionDatoID(peliPrestada, peliculas)][4] = Integer.toString(contador);
                 System.out.println("Se ha prestado la pelicula");
             }else{
                 System.out.println("\nVen a prestar una peli cuando quieras");
@@ -123,6 +132,56 @@ public class Blockbuster {
             System.out.println("Lo sentimos, no se pueden realizar mas prestamos :("); 
         }
         return arreglo;
+
+    }
+
+    public String [][] quitarPrestamo (String[][] arreglo, int idPeli, int idCliente){
+        int indice = posicionDatoID(idCliente, arreglo);
+        if((indice >= 0) && (indice < arreglo.length)){
+            arreglo[indice][0] = null;
+            arreglo[indice][1] = null;
+            arreglo[indice][2] = null;
+            eliminarVacios(arreglo);
+            estadoClientes[posicionDatoID(idCliente, clientes)] = true;
+            estadoPelis[posicionDatoID(idPeli, peliculas)] = true;
+        }
+        return arreglo;
+    }
+
+    public String [][] eliminarVacios (String [][] datos){
+        int posicion = 0;
+        if (datos[0][0] != null) {
+            while(posicion < datos.length){
+                if (datos[posicion][0] == null) {
+                    int indiceAdelntado = posicion + 1;
+                    if (indiceAdelntado < datos.length) {
+                        if (datos[indiceAdelntado] != null) {
+                            datos[posicion] = datos[indiceAdelntado];
+                            datos[indiceAdelntado] = null;
+                        }
+                    }
+                }
+                posicion++;
+            }
+        }
+
+        return datos;
+    }
+    public void imprimirDeudores(){ //CORREGIR ERROR DE CONTADOR EN LUGAR DE PONERLO EN EL CLICLO FOR
+        if (prestamoPeliculas[0][0] != null) {
+            int contador = datosNetos(prestamoPeliculas);
+            for (int i = 0; i < contador; i++) {
+                int idPeliDeudora = Integer.parseInt(prestamoPeliculas[i][1]);
+                int idClienteDeudor = Integer.parseInt(prestamoPeliculas[i][0]);
+                System.out.println("ID: " + prestamoPeliculas[i][1]);
+                System.out.println("Pelicula: " + obtenerDatoArreglo(peliculas, 1, idPeliDeudora));
+                System.out.println("Prestada por: " + obtenerDatoArreglo(clientes, 1, idClienteDeudor));
+                System.out.println("ID prestador: " + prestamoPeliculas[i][0]);
+                System.out.println("Dias que solicito la pelicula: " + prestamoPeliculas[i][2]);
+            }
+        } else {
+            System.out.println("\nNinguna pelicula ha sido prestada");
+        }
 
     }
     public String obtenerDatoArreglo(String[][] datos, int columna, int id){
@@ -246,10 +305,8 @@ public class Blockbuster {
     public int posicionDatoID(int id, String [][] datos){
         int contador = 0;
         if (datos[0][0] != null) {
-            for (int i = 0; i < datosNetos(datos); i++) {
-                if (Integer.valueOf(datos[i][0]) != id) {
-                    contador++;
-                }
+            while((contador < datosNetos(datos)) && (Integer.parseInt(datos[contador][0]) != id)){
+                contador++;
             }
         }
         return contador;
@@ -346,8 +403,8 @@ public class Blockbuster {
                 switch (opcion) {
                     case 1:
                         System.out.println("\n----------PRESTAMO DE PELICULAS-----------\n");
-                        boolean disponiblePelis = verificarDisponibilidad(estadoPelis);
-                        boolean disponibleClientes = verificarDisponibilidad(estadoClientes);
+                        boolean disponiblePelis = verificarDisponibilidad(estadoPelis, true);
+                        boolean disponibleClientes = verificarDisponibilidad(estadoClientes, true);
                         if ((disponiblePelis == true) && (disponibleClientes == true)) {
                             prestamoPeliculas = agregarPrestamo(prestamoPeliculas);
                         }else{
@@ -357,6 +414,22 @@ public class Blockbuster {
                         break;
                     case 2:
                         System.out.println("Quiere devolver una peli");
+                        boolean pelisPrestadas = verificarDisponibilidad(estadoPelis, false);
+                        boolean clientesPrestados = verificarDisponibilidad(estadoClientes, false);
+
+                        if ((pelisPrestadas == true) && (clientesPrestados == true)) {
+                            imprimirDeudores();
+                            int clienteIDDevolver = pedirID(clientes, true, "el ID del cliente que devuelve");
+                            String idPeli = obtenerDatoArreglo(prestamoPeliculas, 1, clienteIDDevolver).trim();
+                            System.out.println("---Id del cliente que presto--- arriba" + idPeli);
+                            int peliIDDevolver = Integer.parseInt(idPeli);
+                            prestamoPeliculas = quitarPrestamo(prestamoPeliculas, peliIDDevolver, clienteIDDevolver);
+                            System.out.println("\nSe ha devuelto la pelicula");
+                        }else{
+                            System.out.println("No hay peliculas prestadas");
+                        }
+                        
+                        
                         break;
                     case 3:
                         System.out.println("\n-----LISTA DE PELICULAS REGISTRADAS-------\n");
