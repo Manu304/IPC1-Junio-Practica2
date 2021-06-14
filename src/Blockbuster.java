@@ -10,11 +10,10 @@ public class Blockbuster {
 
     Scanner scanner = new Scanner(System.in);
     String[][] clientes, peliculas, categorias, prestamoPeliculas; //[fila][columna]
-    //int [][] prestamoPeliculas;
     boolean[] estadoClientes, estadoPelis;
 
     public Blockbuster() {
-        final int CANTIDAD_TOTAL = 3; //CAMBIAR A 30 LA CANTIDAD
+        final int CANTIDAD_TOTAL = 10; //CAMBIAR A 30 LA CANTIDAD
         clientes = new String [CANTIDAD_TOTAL][3];
         estadoClientes = new boolean [CANTIDAD_TOTAL];
         peliculas = new String [CANTIDAD_TOTAL][5];
@@ -514,10 +513,10 @@ public class Blockbuster {
                     mostrarPelis(peliculas, true, true, true);
                     break;
                 case 4:
-                    System.out.println("----Mostrando peli MAS prestada");
+                    System.out.println("\n--------------PELICULA MAS PRESTADA------------");
                     peliculas = ordenarNumerico(peliculas, 4, estadoPelis, true);
                     imprimirPeli(peliculas, (datosNetos(peliculas)-1), true);
-                    System.out.println("-----Mostrando peli MENOS prestada");
+                    System.out.println("\n-------------PELICULA MENOS PRESTADA-----------");
                     imprimirPeli(peliculas, 0, true);
 
                     break;
@@ -543,9 +542,6 @@ public class Blockbuster {
                     salir = true;
                 }else{
                     if (opcion <= datosNetos(categorias)) {
-                        System.out.println("Ha seleccionado ver: " + categorias[(opcion-1)][0]);
-                        System.out.println("Impreso por i cuenta---- segunda vcategra");
-                        
                         mostrarPorCategoria(categorias[(opcion-1)][0]);
                         salir = true;
                     }
@@ -568,7 +564,7 @@ public class Blockbuster {
         }
 
     }
-    //ARREGLAR METODO PARA OBTENER CATEGORIAS
+
     public String[][] agregarCategoria(String[][] arreglo, String categoria){
         int posicion = 0;
         
