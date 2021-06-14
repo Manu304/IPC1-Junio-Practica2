@@ -562,7 +562,7 @@ public class Blockbuster {
                 if (categoria.equalsIgnoreCase(arreglo[posicion-1][0])) {
                     int contador = Integer.parseInt(arreglo[posicion-1][1]) + 1;
                     arreglo[posicion-1][1] = Integer.toString(contador);
-                    System.out.println("he sumado en el contador: " + arreglo[posicion-1][0] + " cantidad: " + arreglo[posicion-1][1]);
+                    
                 } else {
                     arreglo[posicion][0] = categoria;
                     arreglo[posicion][1] = "1";
