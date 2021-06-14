@@ -553,16 +553,20 @@ public class Blockbuster {
             }
         }
     }
-    public void mostrarPorCategoria(String categoria){
-        int contador = 0;
-        System.out.println("\n-------PELICULAS DE " + categoria.toUpperCase() + "-------\n");
-        while ((contador < datosNetos(peliculas)) && (peliculas[contador][3].equals(categoria))) {
+    public void mostrarPorCategoria(String categoriaAB){
+        //int contador = 0;
+        System.out.println("\n-------PELICULAS DE " + categoriaAB.toUpperCase() + "-------\n");
+        /*while ((contador < datosNetos(peliculas)) && (peliculas[contador][3].equals(categoria))) {
             imprimirPeli(peliculas, contador, false);
             contador++;
+        }*/
+        for (int i = 0; i < datosNetos(categorias); i++) {
+            if (categoriaAB.equalsIgnoreCase(peliculas[i][3])) {
+                imprimirPeli(peliculas, i, false);
+            }
+            
         }
-        if (contador == 0) {
-            System.out.println("No hay peliculas en esta categoria");
-        }
+
     }
     //ARREGLAR METODO PARA OBTENER CATEGORIAS
     public String[][] agregarCategoria(String[][] arreglo, String categoria){
