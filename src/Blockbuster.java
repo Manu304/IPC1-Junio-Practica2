@@ -173,7 +173,7 @@ public class Blockbuster {
             for (int i = 0; i < contador; i++) {
                 int idPeliDeudora = Integer.parseInt(prestamoPeliculas[i][1]);
                 int idClienteDeudor = Integer.parseInt(prestamoPeliculas[i][0]);
-                System.out.println("ID: " + prestamoPeliculas[i][1]);
+                System.out.println("ID Pelicula: " + prestamoPeliculas[i][1]);
                 System.out.println("Pelicula: " + obtenerDatoArreglo(peliculas, 1, idPeliDeudora));
                 System.out.println("Prestada por: " + obtenerDatoArreglo(clientes, 1, idClienteDeudor));
                 System.out.println("ID prestador: " + prestamoPeliculas[i][0]);
@@ -413,15 +413,16 @@ public class Blockbuster {
                         
                         break;
                     case 2:
-                        System.out.println("Quiere devolver una peli");
+                        System.out.println("\n------------DEVOLUCION DE PELICULAS-------------\n");
                         boolean pelisPrestadas = verificarDisponibilidad(estadoPelis, false);
                         boolean clientesPrestados = verificarDisponibilidad(estadoClientes, false);
 
-                        if ((pelisPrestadas == true) && (clientesPrestados == true)) {
+                        if ((pelisPrestadas == true) && (clientesPrestados == true) && (prestamoPeliculas[0][0] != null)) {
+                            System.out.println("------------LISTA DE PELICULAS PRESTADAS----------\n");
                             imprimirDeudores();
+                            System.out.println();
                             int clienteIDDevolver = pedirID(clientes, true, "el ID del cliente que devuelve");
                             String idPeli = obtenerDatoArreglo(prestamoPeliculas, 1, clienteIDDevolver).trim();
-                            System.out.println("---Id del cliente que presto--- arriba" + idPeli);
                             int peliIDDevolver = Integer.parseInt(idPeli);
                             prestamoPeliculas = quitarPrestamo(prestamoPeliculas, peliIDDevolver, clienteIDDevolver);
                             System.out.println("\nSe ha devuelto la pelicula");
